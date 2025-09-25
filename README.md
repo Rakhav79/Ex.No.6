@@ -242,7 +242,7 @@ print("- persona_ai_aggregated.csv (aggregated metrics)")
 print("- persona_experiment_plots.png (chart)")
 print("- persona_experiment_report.md (Markdown report)")
 
----
+```
 | Tool      | PromptType | Quality | Accuracy | Depth |
 | :-------- | :--------- | ------: | -------: | ----: |
 | Anthropic | naive      |     1.4 |      2.5 |     1 |
