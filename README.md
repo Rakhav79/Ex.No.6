@@ -131,8 +131,6 @@ def summarize_text(text: str, max_length: int = 200) -> str:
 ---
 📝 Python Script: Programmer Persona Experiment
 
-# file: persona_ai_pipeline.py
-
 import os
 import pandas as pd
 import numpy as np
@@ -140,7 +138,6 @@ import matplotlib.pyplot as plt
 from abc import ABC, abstractmethod
 from typing import Dict, Any
 
-# ==== AI Connector Base Class ====
 class AIConnectorBase(ABC):
     def __init__(self, name: str, mode: str = "mock"):
         self.name = name
@@ -150,7 +147,6 @@ class AIConnectorBase(ABC):
     def call(self, prompt: str) -> str:
         pass
 
-# ==== Mock Connectors (replace with real API calls) ====
 class MockOpenAIConnector(AIConnectorBase):
     def call(self, prompt: str) -> str:
         if "skilled Python programmer" in prompt:
@@ -171,8 +167,6 @@ class MockAnthropicConnector(AIConnectorBase):
             return "class APIClient:\n    \"\"\"Client wrapper with error handling\"\"\"\n    def __init__(self, base_url: str):\n        self.base_url = base_url"
         else:
             return "def call_api(url):\n    return requests.get(url).json()"
-
-# ==== Experiment Setup ====
 scenarios = [
     {
         "name": "Summarization",
@@ -197,14 +191,11 @@ tools = [
     MockAnthropicConnector("Anthropic")
 ]
 
-# ==== Scoring Heuristics ====
 def score_response(code: str) -> Dict[str, float]:
     quality = min(len(set(code.split())), 50) / 50 * 5
     accuracy = (("def" in code) + ("class" in code)) * 2.5
     depth = (("docstring" in code) + ("error" in code) + ("typing" in code)) * 1.5 + (len(code) > 80)
     return {"Quality": quality, "Accuracy": accuracy, "Depth": depth}
-
-# ==== Run Experiment ====
 results = []
 for tool in tools:
     for sc in scenarios:
@@ -222,18 +213,12 @@ for tool in tools:
 
 df = pd.DataFrame(results)
 df.to_csv("persona_ai_results.csv", index=False)
-
-# ==== Aggregated Scores ====
 agg = df.groupby(["Tool", "PromptType"])[["Quality", "Accuracy", "Depth"]].mean().reset_index()
 agg.to_csv("persona_ai_aggregated.csv", index=False)
-
-# ==== Visualization ====
 pivot = agg.pivot(index="Tool", columns="PromptType", values="Quality")
 pivot.plot(kind="bar", title="Quality: Persona vs Naive", ylabel="Score (0-5)")
 plt.savefig("persona_experiment_plots.png")
 plt.close()
-
-# ==== Markdown Report ====
 report = "# Persona Experiment Report\n\n"
 report += "## Aggregated Scores\n\n"
 report += agg.to_markdown(index=False)
@@ -251,12 +236,6 @@ print("- persona_ai_aggregated.csv (aggregated metrics)")
 print("- persona_experiment_plots.png (chart)")
 print("- persona_experiment_report.md (Markdown report)")
 
-# Conclusion:
-
-* **Naïve prompts** → produce *working but shallow* code.
-* **Persona-based prompts** → yield *production-quality, reusable, and maintainable* code.
-* For **developer-focused tasks**, always **frame the AI as a skilled programmer** with explicit instructions about best practices.
-
 | Tool      | PromptType | Quality | Accuracy | Depth |
 | :-------- | :--------- | ------: | -------: | ----: |
 | Anthropic | naive      |     1.4 |      2.5 |     1 |
@@ -266,6 +245,9 @@ print("- persona_experiment_report.md (Markdown report)")
 | OpenAI    | naive      |     1.3 |      2.5 |     1 |
 | OpenAI    | persona    |     2.8 |      2.5 |   2.5 |
 
+# Conclusion:
+
+In this experiment, we compared the responses of two different language models, GPT-4o-mini and Cohere, to the same input question. The results showed that the models provided different answers, which indicates that each model has its unique way of generating text based on its training data and architecture.
 
 
 
